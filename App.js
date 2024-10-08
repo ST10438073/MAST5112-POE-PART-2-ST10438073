@@ -1,112 +1,86 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
 import React from 'react';
-import type {Node} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import LoginScreen from './LoginScreen';
+import MenuScreen from './MenuScreen';
+import FilteredMenuScreen from './FilteredMenuScreen';
+import ChefMenuScreen from './ChefMenuScreen';
+import AddRemoveMenuScreen from './AddRemoveMenuScreen';
+import { MenuProvider } from './MenuContext';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+const Stack = createNativeStackNavigator();
 
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
+export default function App() {
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
+    <MenuProvider>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="Chef Login" component={LoginScreen} />
+          <Stack.Screen name="Menu" component={MenuScreen} />
+          <Stack.Screen name="Filtered Menu" component={FilteredMenuScreen} />
+          <Stack.Screen name="Chefs Menu" component={ChefMenuScreen} />
+          <Stack.Screen name="Add/Remove Menu Items" component={AddRemoveMenuScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </MenuProvider>
+  );
+};
+
+function HomeScreen({ navigation }) {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.headerText}>Welcome to Christoffel's</Text>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Menu')}>
+        <Text style={styles.buttonText}>Menu</Text>
+      </TouchableOpacity>
+      <View style={styles.spacer} />
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Chef Login')}>
+        <Text style={styles.buttonText}>Chef Log In</Text>
+      </TouchableOpacity>
     </View>
   );
 };
 
-const App: () => Node = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-};
-
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  container: {
+    flex: 1,
+    backgroundColor: '#f5f5dc', 
+    justifyContent: 'center',
+    padding: 20,
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  headerText: {
+    fontSize: 30,
+    fontFamily: 'serif', 
+    fontWeight: 'bold',
+    color: '#8b4513', 
+    textAlign: 'center',
+    marginBottom: 30,
   },
-  sectionDescription: {
-    marginTop: 8,
+  button: {
+    backgroundColor: '#a0522d', 
+    padding: 15,
+    borderRadius: 10,
+    alignItems: 'center',
+    marginVertical: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  buttonText: {
+    color: '#fff',
     fontSize: 18,
-    fontWeight: '400',
+    fontWeight: 'bold',
   },
-  highlight: {
-    fontWeight: '700',
+  spacer: {
+    flex: 1,
+    justifyContent: 'flex-end',
   },
 });
 
-export default App;
+
+
+
